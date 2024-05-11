@@ -3,7 +3,7 @@ using MissingZoneApi.Entities;
 
 namespace MissingZoneApi.Interfaces;
 
-public interface IAdmin
+public interface IVolunteer
 {
-    Task<AdminResponse> GetMe(string adminEmail);
+    
 }
