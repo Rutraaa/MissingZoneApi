@@ -11,34 +11,49 @@ namespace MissingZoneApi.Controllers
     public class MissingPostController : ControllerBase
     {
         private readonly IMissingPost _missingPost;
+        private readonly IPhotoRepo _photo;
 
-        public MissingPostController(IMissingPost missingPost)
+        public MissingPostController(IMissingPost missingPost, IPhotoRepo photo)
         {
             _missingPost = missingPost;
+            _photo = photo;
+
         }
 
         [HttpPost("/create")]
         public async Task<IActionResult> Create([FromBody] CreateMissingPostRequest model)
         {
+            var createdDate = DateTime.Now;
 
             var missingPost = new MissingPost
             {
                 Title = model.Title,
                 Description = model.Description,
-                Photos = model.Photos,
                 ContactInfo = model.ContactInfo,
                 UserId = model.UserId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 FatherName = model.FatherName,
                 BirthDate = model.BirthDate,
-                CreateDate = DateTime.Now,
+                CreateDate = createdDate,
                 City = model.City
             };
 
-            // TODO: Save foto content
-
             await _missingPost.Create(missingPost);
+
+            var missingPostsId = await _missingPost.GetIdByDate(createdDate);
+
+            foreach (var conetents in model.Contents)
+            {
+                var photo = new Photo()
+                {
+                    MissingPostId = missingPostsId,
+                    Content = conetents
+                };
+
+                await _photo.Create(photo);
+            }
+
             return Ok();
         }
 

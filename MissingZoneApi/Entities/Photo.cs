@@ -7,7 +7,8 @@ namespace MissingZoneApi.Entities
 {
     public partial class Photo
     {
-        public int? PhotoId { get; set; }
+        public int PhotoId { get; set; }
+        public int? MissingPostId { get; set; }
         public string Content { get; set; }
     }
 }

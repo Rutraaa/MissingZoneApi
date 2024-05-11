@@ -15,11 +15,11 @@ public class MissingPostRepo : IMissingPost
 
     public async Task Create(MissingPost missingPost)
     {
-            _mzonedbContext.MissingPosts.Add(missingPost);
+        _mzonedbContext.MissingPosts.Add(missingPost);
 
-            await _mzonedbContext.SaveChangesAsync();
-        
-        
+        await _mzonedbContext.SaveChangesAsync();
+
+
     }
 
     public async Task<List<MissingPost>> GetAll()
@@ -58,5 +58,11 @@ public class MissingPostRepo : IMissingPost
 
         _mzonedbContext.MissingPosts.Remove(missingPost);
         await _mzonedbContext.SaveChangesAsync();
+    }
+
+    public async Task<int?> GetIdByDate(DateTime createdDate)
+    {
+        var missingPost = await _mzonedbContext.MissingPosts.FirstOrDefaultAsync(x=>x.CreateDate == createdDate);
+        return missingPost?.MissingPostId;
     }
 }
