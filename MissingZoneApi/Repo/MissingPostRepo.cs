@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MissingZoneApi.Contracts.Admin;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 
@@ -12,5 +11,52 @@ public class MissingPostRepo : IMissingPost
     public MissingPostRepo(mzonedbContext mzonedbContext)
     {
         _mzonedbContext = mzonedbContext;
+    }
+
+    public async Task Create(MissingPost missingPost)
+    {
+            _mzonedbContext.MissingPosts.Add(missingPost);
+
+            await _mzonedbContext.SaveChangesAsync();
+        
+        
+    }
+
+    public async Task<List<MissingPost>> GetAll()
+    {
+        return await _mzonedbContext.MissingPosts.ToListAsync();
+    }
+
+    public async Task<MissingPost> Read(int id)
+    {
+        try
+        {
+            var missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
+
+            if (missingPost == null)
+            {
+                throw new ArgumentException("Missing post not found");
+            }
+
+            return await _mzonedbContext.MissingPosts.FindAsync(id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task Delete(int id)
+    {
+        var missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
+
+        if (missingPost == null)
+        {
+            throw new ArgumentException("Missing post not found");
+        }
+
+        _mzonedbContext.MissingPosts.Remove(missingPost);
+        await _mzonedbContext.SaveChangesAsync();
     }
 }
