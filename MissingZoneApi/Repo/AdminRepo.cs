@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MissingZoneApi.Dto.Admin;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 
@@ -13,13 +14,17 @@ public class AdminRepo : IAdmin
         _mzonedbContext = mzonedbContext;
     }
 
-    public async Task<Admin> GetMe()
+    public async Task<AdminResponse> GetMe(string adminEmail)
     {
-
         try
         {
-            var adminMe = await _mzonedbContext.Admins.FirstAsync();
-            return adminMe;
+            var adminMe = await _mzonedbContext.Admins.FirstAsync(item => item.Email == adminEmail);
+            return new AdminResponse
+            {
+                FirstName = adminMe.FirstName,
+                LastName = adminMe.LastName,
+                OrganizationName = adminMe.OrganizationName,
+            };
 
         }
         catch (Exception e)

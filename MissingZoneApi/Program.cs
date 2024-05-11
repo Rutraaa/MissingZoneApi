@@ -11,9 +11,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
-
-builder.Services.AddScoped<IAdmin, AdminRepo>();
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -34,6 +31,13 @@ builder.Services.AddDbContext<mzonedbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
+
+builder.Services.AddScoped<IAdmin, AdminRepo>();
+builder.Services.AddScoped<IComment, CommentRepo>();
+builder.Services.AddScoped<IMissingPost, MissingPostRepo>();
+builder.Services.AddScoped<IMp2v, Mp2vRepo>();
+builder.Services.AddScoped<IUser, UserRepo>();
+builder.Services.AddScoped<IVolunteer, VolunteerRepo>();
 
 var app = builder.Build();
 

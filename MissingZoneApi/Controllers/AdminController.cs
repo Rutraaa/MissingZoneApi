@@ -14,10 +14,10 @@ namespace MissingZoneApi.Controllers
             _admin = admin;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("/{adminEmail}")]
+        public async Task<IActionResult> Get(string adminEmail)
         {
-            return Ok( await _admin.GetMe());
+            return Ok( await _admin.GetMe(adminEmail));
         }
     }
 }
