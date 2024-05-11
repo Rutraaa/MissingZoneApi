@@ -17,4 +17,8 @@
     <None Include="efpt.config.json.user" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Comments\" />
+  </ItemGroup>
+
 </Project>

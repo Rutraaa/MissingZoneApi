@@ -17,11 +17,20 @@ namespace MissingZoneApi.Controllers
             _volunteer = volunteer;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers([FromQuery] PageData pageData)
         {
             PayloadResponse<VolunteerInfo> response = await _volunteer.GetAll(pageData);
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("/verifyVolunteer/{email}")]
+        public async Task<IActionResult> VerifyVolunteer(string email)
+        {
+            await _volunteer.Verify(email);
+            return Ok();
         }
     }
 }

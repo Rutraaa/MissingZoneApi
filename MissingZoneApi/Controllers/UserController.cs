@@ -23,5 +23,13 @@ namespace MissingZoneApi.Controllers
             PayloadResponse<UserInfo> response = await _user.GetAll(pageData);
             return Ok(response);
         }
+
+        [Authorize]
+        [HttpPost("/verifyUser/{email}")]
+        public async Task<IActionResult> VerifyUser(string email)
+        {
+            await _user.Verify(email);
+            return Ok();
+        }
     }
 }

@@ -38,8 +38,8 @@ public class MissingPostRepo : IMissingPost
                 throw new ArgumentException("Missing post not found");
             }
 
-            List<string> photos = await _mzonedbContext.Photos
-                .Where(item => item.MissingPostId == missingPost.MissingPostId).Select(item => item.Content);
+            List<string> photos = _mzonedbContext.Photos
+                .Where(item => item.MissingPostId == missingPost.MissingPostId).Select(item => item.Content).ToList();
 
             MissingPostInfo result = new MissingPostInfo
             {

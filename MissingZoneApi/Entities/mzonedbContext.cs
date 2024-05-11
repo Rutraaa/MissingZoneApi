@@ -62,6 +62,8 @@ namespace MissingZoneApi.Entities
                 entity.ToTable("Comment");
 
                 entity.Property(e => e.Comment1).HasColumnName("Comment");
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<MissingPost>(entity =>
