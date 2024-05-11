@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 using MissingZoneApi.Repo;
+using MissingZoneApi.Services;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +69,7 @@ builder.Services.AddScoped<IMp2v, Mp2vRepo>();
 builder.Services.AddScoped<IUser, UserRepo>();
 builder.Services.AddScoped<IVolunteer, VolunteerRepo>();
 builder.Services.AddScoped<IPhotoRepo, PhotoRepo>();
+builder.Services.AddScoped<IMissingPostsFilterService, MissingPostsFilterService>();
 
 var app = builder.Build();
 

@@ -14,11 +14,13 @@ namespace MissingZoneApi.Controllers
     {
         private readonly IMissingPost _missingPost;
         private readonly IPhotoRepo _photo;
+        private readonly IMissingPostsFilterService _missingPostsFilterService;
 
-        public MissingPostController(IMissingPost missingPost, IPhotoRepo photo)
+        public MissingPostController(IMissingPost missingPost, IPhotoRepo photo, IMissingPostsFilterService missingPostsFilterService)
         {
             _missingPost = missingPost;
             _photo = photo;
+            _missingPostsFilterService = missingPostsFilterService;
 
         }
 
@@ -66,32 +68,10 @@ namespace MissingZoneApi.Controllers
             try
             {
                 var missingPosts = await _missingPost.GetAll();
+                var filteredPosts = _missingPostsFilterService.FilterMissingPosts(missingPosts, pageData);
+
                 var paginationService = new PaginationService<MissingPost>();
-                var pagedResponse = await paginationService.GetPagedDataAsync(missingPosts, pageData);
-
-                var filteredPosts = (IEnumerable<MissingPost>)pagedResponse.Data;
-
-                if (pageData.BirthDate.HasValue)
-                {
-                    var birthDate = pageData.BirthDate.Value.Date; // Відсікати час, лише дата
-                    filteredPosts = filteredPosts.Where(post =>
-                        post.BirthDate.HasValue &&
-                        post.BirthDate.Value.ToShortDateString() == birthDate.ToShortDateString());
-                }
-
-                if (!string.IsNullOrEmpty(pageData.FirstName))
-                    filteredPosts = filteredPosts.Where(post => post.FirstName.ToLower() == pageData.FirstName.ToLower());
-
-                if (!string.IsNullOrEmpty(pageData.LastName))
-                    filteredPosts = filteredPosts.Where(post => post.LastName.ToLower() == pageData.LastName.ToLower());
-
-                if (!string.IsNullOrEmpty(pageData.FatherName))
-                    filteredPosts = filteredPosts.Where(post => post.FatherName.ToLower() == pageData.FatherName.ToLower());
-
-                if (!string.IsNullOrEmpty(pageData.City))
-                    filteredPosts = filteredPosts.Where(post => post.City.ToLower() == pageData.City.ToLower());
-
-                pagedResponse.Data = filteredPosts.ToList();
+                var pagedResponse = await paginationService.GetPagedDataAsync(filteredPosts, pageData);
 
                 return Ok(pagedResponse);
             }
