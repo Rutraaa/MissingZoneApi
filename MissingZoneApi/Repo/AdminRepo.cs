@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MissingZoneApi.Dto.Admin;
+using MissingZoneApi.Contracts.Admin;
+using MissingZoneApi.Contracts.AuthReg;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 
@@ -14,13 +15,14 @@ public class AdminRepo : IAdmin
         _mzonedbContext = mzonedbContext;
     }
 
-    public async Task<AdminResponse> GetMe(string adminEmail)
+    public async Task<AdminGetResponse> GetMe(string email)
     {
         try
         {
-            var adminMe = await _mzonedbContext.Admins.FirstAsync(item => item.Email == adminEmail);
-            return new AdminResponse
+            Admin adminMe = await _mzonedbContext.Admins.FirstAsync(item => item.Email == email);
+            return new AdminGetResponse
             {
+                Email = adminMe.Email,
                 FirstName = adminMe.FirstName,
                 LastName = adminMe.LastName,
                 OrganizationName = adminMe.OrganizationName,
@@ -32,5 +34,31 @@ public class AdminRepo : IAdmin
             Console.WriteLine(e);
             throw;
         } 
+    }
+
+    public LoginResponse CheckIsExist(LoginRequest userLogin)
+    {
+        try
+        {
+            bool isExist = _mzonedbContext.Admins
+                .Any(item => item.Email == userLogin.Email);
+            if (!isExist)
+            {
+                return new LoginResponse { IsExist = isExist, Messsage = string.Empty };
+            }
+            isExist = _mzonedbContext.Admins
+                .Any(item => item.Password == userLogin.Password);
+            if (!isExist)
+            {
+                return new LoginResponse { IsExist = isExist, Messsage = "Wrong password" };
+            }
+
+            return new LoginResponse { IsExist = isExist, Messsage = string.Empty}; ;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

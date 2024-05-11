@@ -20,7 +20,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Comments]",
+         "Name": "[dbo].[Comment]",
          "ObjectType": 0
       },
       {
@@ -29,6 +29,10 @@
       },
       {
          "Name": "[dbo].[MP2V]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Photo]",
          "ObjectType": 0
       },
       {

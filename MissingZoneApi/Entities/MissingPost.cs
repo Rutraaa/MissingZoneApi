@@ -10,7 +10,7 @@ namespace MissingZoneApi.Entities
         public int MissingPostId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public byte[] Photos { get; set; }
+        public int? Photos { get; set; }
         public string ContactInfo { get; set; }
         public string UserId { get; set; }
         public string FirstName { get; set; }
@@ -18,7 +18,6 @@ namespace MissingZoneApi.Entities
         public string FatherName { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? CreateDate { get; set; }
-        public DateTime? UpdateDate { get; set; }
         public string City { get; set; }
     }
 }
