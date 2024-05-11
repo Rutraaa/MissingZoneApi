@@ -8,4 +8,5 @@ public interface IMissingPost
     Task<List<MissingPost>> GetAll();
     Task<MissingPost> Read(int id);
     Task Delete(int id);
+    Task<int?> GetIdByDate(DateTime createdDate);
 }

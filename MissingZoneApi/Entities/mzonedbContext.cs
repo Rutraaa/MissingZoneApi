@@ -60,6 +60,8 @@ namespace MissingZoneApi.Entities
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.ToTable("Comment");
+
+                entity.Property(e => e.Comment1).HasColumnName("Comment");
             });
 
             modelBuilder.Entity<MissingPost>(entity =>
@@ -81,8 +83,6 @@ namespace MissingZoneApi.Entities
 
             modelBuilder.Entity<Photo>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Photo");
             });
 

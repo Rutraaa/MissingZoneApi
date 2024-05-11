@@ -67,6 +67,7 @@ builder.Services.AddScoped<IMissingPost, MissingPostRepo>();
 builder.Services.AddScoped<IMp2v, Mp2vRepo>();
 builder.Services.AddScoped<IUser, UserRepo>();
 builder.Services.AddScoped<IVolunteer, VolunteerRepo>();
+builder.Services.AddScoped<IPhotoRepo, PhotoRepo>();
 
 var app = builder.Build();
 
