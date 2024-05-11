@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.MissingPost;
@@ -24,6 +25,7 @@ namespace MissingZoneApi.Controllers
 
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMissingPostRequest model)
         {
@@ -62,6 +64,7 @@ namespace MissingZoneApi.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest pageData)
         {
@@ -81,6 +84,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -92,7 +96,7 @@ namespace MissingZoneApi.Controllers
             return Ok(missingPost);
         }
 
-
+        [Authorize]
         [HttpDelete("/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
