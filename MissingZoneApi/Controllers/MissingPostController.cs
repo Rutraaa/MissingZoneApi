@@ -34,6 +34,7 @@ namespace MissingZoneApi.Controllers
                 UserId = model.UserId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
+                Coordinates = string.Join(",", model.Coordinates),
                 FatherName = model.FatherName,
                 BirthDate = model.BirthDate,
                 CreateDate = createdDate,
@@ -91,7 +92,7 @@ namespace MissingZoneApi.Controllers
         [HttpGet("/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var missingPost = await _missingPost.Read(id);
+            var missingPost = await _missingPost.Get(id);
             if (missingPost == null)
             {
                 return NotFound("Missing post not found");

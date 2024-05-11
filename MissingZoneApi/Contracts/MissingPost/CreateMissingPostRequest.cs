@@ -6,6 +6,7 @@
         public string Description { get; set; }
         public int Photos { get; set; }
         public List<string> Contents { get; set; }
+        public List<double> Coordinates { get; set; }
         public string ContactInfo { get; set; }
         public string UserId { get; set; }
         public string FirstName { get; set; }
