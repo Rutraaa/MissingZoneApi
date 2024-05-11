@@ -1,4 +1,4 @@
-﻿namespace MissingZoneApi.Dto.Admin;
+﻿namespace MissingZoneApi.Contracts.Admin;
 
 public class AdminResponse
 {

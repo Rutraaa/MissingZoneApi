@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MissingZoneApi.Dto.Admin;
+using MissingZoneApi.Contracts.Admin;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 

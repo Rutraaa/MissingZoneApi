@@ -22,6 +22,7 @@ namespace MissingZoneApi.Entities
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<MissingPost> MissingPosts { get; set; }
         public virtual DbSet<Mp2v> Mp2vs { get; set; }
+        public virtual DbSet<Photo> Photos { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Volunteer> Volunteers { get; set; }
 
@@ -58,82 +59,31 @@ namespace MissingZoneApi.Entities
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.Property(e => e.CommentId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CommentID");
-
-                entity.Property(e => e.Comment1)
-                    .IsUnicode(false)
-                    .HasColumnName("Comment");
-
-                entity.Property(e => e.MissingPostId).HasColumnName("MissingPostID");
-
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("UserID");
+                entity.ToTable("Comment");
             });
 
             modelBuilder.Entity<MissingPost>(entity =>
             {
                 entity.ToTable("MissingPost");
 
-                entity.Property(e => e.MissingPostId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MissingPostID");
-
-                entity.Property(e => e.BirthDate).HasColumnType("date");
-
-                entity.Property(e => e.City)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ContactInfo)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
                 entity.Property(e => e.CreateDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Description).IsUnicode(false);
-
-                entity.Property(e => e.FatherName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FirstName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.LastName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Title)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdateDate).HasColumnType("datetime");
-
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("UserID");
             });
 
             modelBuilder.Entity<Mp2v>(entity =>
             {
                 entity.HasKey(e => e.MissingPostToVolunteerId)
-                    .HasName("PK__MP2V__B363148A6DAE7EC8");
+                    .HasName("PK__MP2V__B36314EA79653BCC");
 
                 entity.ToTable("MP2V");
+            });
 
-                entity.Property(e => e.MissingPostToVolunteerId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MissingPostToVolunteerID");
+            modelBuilder.Entity<Photo>(entity =>
+            {
+                entity.HasNoKey();
 
-                entity.Property(e => e.MissingPostId).HasColumnName("MissingPostID");
-
-                entity.Property(e => e.VolunteerId).HasColumnName("VolunteerID");
+                entity.ToTable("Photo");
             });
 
             modelBuilder.Entity<User>(entity =>
