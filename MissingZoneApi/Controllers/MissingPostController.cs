@@ -4,6 +4,7 @@ using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.MissingPost;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
+using MissingZoneApi.Services;
 
 namespace MissingZoneApi.Controllers
 {
@@ -44,12 +45,12 @@ namespace MissingZoneApi.Controllers
 
             var missingPostsId = await _missingPost.GetIdByDate(createdDate);
 
-            foreach (var conetents in model.Contents)
+            foreach (var content in model.Contents)
             {
                 var photo = new Photo()
                 {
                     MissingPostId = missingPostsId,
-                    Content = conetents
+                    Content = content
                 };
 
                 await _photo.Create(photo);
@@ -59,28 +60,39 @@ namespace MissingZoneApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest request)
+        public async Task<IActionResult> GetAll([FromQuery] PageData pageData)
         {
             try
             {
                 var missingPosts = await _missingPost.GetAll();
+                var paginationService = new PaginationService<MissingPost>();
+                var pagedResponse = await paginationService.GetPagedDataAsync(missingPosts, pageData);
 
-                int totalCount = missingPosts.Count();
-                int totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize);
+                var filteredPosts = pagedResponse.Data.AsQueryable();
 
-                var pagedMissingPosts = missingPosts
-                    .Skip((request.PageNumber - 1) * request.PageSize)
-                    .Take(request.PageSize)
-                    .ToList();
-
-                return Ok(new PayloadResponse<MissingPost>
+                if (pageData.BirthDate.HasValue)
                 {
-                    TotalCount = totalCount,
-                    PageNumber = request.PageNumber,
-                    PageSize = request.PageSize,
-                    TotalPages = totalPages,
-                    Data = pagedMissingPosts
-                });
+                    var birthDate = pageData.BirthDate.Value.Date; // Відсікати час, лише дата
+                    filteredPosts = filteredPosts.Where(post =>
+                        post.BirthDate.HasValue &&
+                        post.BirthDate.Value.Date.ToShortDateString() == birthDate.ToShortDateString());
+                }
+
+                if (!string.IsNullOrEmpty(pageData.FirstName))
+                    filteredPosts = filteredPosts.Where(post => post.FirstName.ToLower() == pageData.FirstName.ToLower());
+
+                if (!string.IsNullOrEmpty(pageData.LastName))
+                    filteredPosts = filteredPosts.Where(post => post.LastName.ToLower() == pageData.LastName.ToLower());
+
+                if (!string.IsNullOrEmpty(pageData.FatherName))
+                    filteredPosts = filteredPosts.Where(post => post.FatherName.ToLower() == pageData.FatherName.ToLower());
+
+                if (!string.IsNullOrEmpty(pageData.City))
+                    filteredPosts = filteredPosts.Where(post => post.City.ToLower() == pageData.City.ToLower());
+
+                pagedResponse.Data = filteredPosts.ToList();
+
+                return Ok(pagedResponse);
             }
             catch (Exception ex)
             {
