@@ -53,42 +53,42 @@ namespace MissingZoneApi.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> LoginUser([FromBody]LoginRequest userLogin)
+        public async Task<ActionResult<LoginResponse>> LoginUser([FromBody]LoginRequest userLogin)
         {
-            LoginResponse isAdmin = _admin.CheckIsExist(userLogin);
+            LoginResult isAdmin = _admin.CheckIsExist(userLogin);
 
             if (isAdmin.IsExist)
             {
                 TokenService tokenService = new TokenService(_configuration);
                 string token = "bearer " + tokenService.CreateToken(userLogin.Email);
 
-                return Ok(token);
+                return Ok(new LoginResponse { Token = token, Role = "admin" });
             }
             if (!isAdmin.Messsage.IsNullOrEmpty())
                 return BadRequest(isAdmin.Messsage);
 
-            LoginResponse isUser = _user.CheckIsExist(userLogin);
+            LoginResult isUser = _user.CheckIsExist(userLogin);
 
             if (isUser.IsExist)
             {
                 TokenService tokenService = new TokenService(_configuration);
                 string token = "bearer " + tokenService.CreateToken(userLogin.Email);
 
-                return Ok(token);
+                return Ok(new LoginResponse { Token = token, Role = "user" });
             }
-            if (isUser.Messsage.IsNullOrEmpty())
+            if (!isUser.Messsage.IsNullOrEmpty())
                 return BadRequest(isUser.Messsage);
 
-            LoginResponse isVolunteer = _volunteer.CheckIsExist(userLogin);
+            LoginResult isVolunteer = _volunteer.CheckIsExist(userLogin);
 
             if (isVolunteer.IsExist)
             {
                 TokenService tokenService = new TokenService(_configuration);
                 string token = "bearer " + tokenService.CreateToken(userLogin.Email);
 
-                return Ok(token);
+                return Ok(new LoginResponse { Token = token, Role = "volunteer" });
             }
-            if (isVolunteer.Messsage.IsNullOrEmpty())
+            if (!isVolunteer.Messsage.IsNullOrEmpty())
                 return BadRequest(isVolunteer.Messsage);
 
             return BadRequest("User not found");

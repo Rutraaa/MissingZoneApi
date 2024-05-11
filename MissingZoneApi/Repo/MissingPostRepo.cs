@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MissingZoneApi.Contracts;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 

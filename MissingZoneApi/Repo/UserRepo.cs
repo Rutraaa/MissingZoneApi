@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.Admin;
 using MissingZoneApi.Contracts.AuthReg;
 using MissingZoneApi.Entities;
@@ -36,7 +39,51 @@ public class UserRepo : IUser
         }
     }
 
-    public LoginResponse CheckIsExist(LoginRequest userLogin)
+    public async Task<PayloadResponse<UserInfo>> GetAll(PageData pageData)
+    {
+        List<User> users = await _mzonedbContext.Users.ToListAsync();
+
+        int totalCount = users.Count();
+        int totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
+
+        var filteredList = users.Where(item => item.IsVerified == false)
+            .Skip((pageData.PageNumber - 1) * pageData.PageSize)
+            .Take(pageData.PageSize).Select(item => new UserInfo
+            {
+                Email = item.Email,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                Phone = item.Phone
+            })
+            .ToList();
+
+        return new PayloadResponse<UserInfo>
+        {
+            TotalCount = totalCount,
+            PageNumber = pageData.PageNumber,
+            PageSize = pageData.PageSize,
+            TotalPages = totalPages,
+            Data = filteredList
+        };
+    }
+
+    public async Task Verify(string email)
+    {
+        try
+        {
+            User user = await _mzonedbContext.Users.FirstAsync(item => item.Email == email);
+            user.IsVerified = false;
+            await _mzonedbContext.SaveChangesAsync();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public LoginResult CheckIsExist(LoginRequest userLogin)
     {
         try
         {
@@ -44,16 +91,16 @@ public class UserRepo : IUser
                 .Any(item => item.Email == userLogin.Email);
             if (!isExist)
             {
-                return new LoginResponse { IsExist = isExist, Messsage = string.Empty };
+                return new LoginResult { IsExist = isExist, Messsage = string.Empty };
             }
             isExist = _mzonedbContext.Users
                 .Any(item => item.Password == userLogin.Password);
             if (!isExist)
             {
-                return new LoginResponse { IsExist = isExist, Messsage = "Wrong password" };
+                return new LoginResult { IsExist = isExist, Messsage = "Wrong password" };
             }
 
-            return new LoginResponse { IsExist = isExist, Messsage = string.Empty }; ;
+            return new LoginResult { IsExist = isExist, Messsage = string.Empty }; ;
         }
         catch (Exception e)
         {
@@ -70,9 +117,7 @@ public class UserRepo : IUser
             Password = registration.Password,
             FirstName = registration.FirstName,
             LastName = registration.LastName,
-            Photo = new byte[]
-            {
-            },
+            Photo = Encoding.UTF8.GetBytes(registration.Photo),
             IsVerified = false,
             Phone = registration.Phone
         });
