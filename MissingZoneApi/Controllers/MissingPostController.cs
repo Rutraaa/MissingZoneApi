@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.MissingPost;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
@@ -17,7 +18,7 @@ namespace MissingZoneApi.Controllers
             _missingPost = missingPost;
         }
 
-        [HttpPost("/create")]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMissingPostRequest model)
         {
 
@@ -42,7 +43,7 @@ namespace MissingZoneApi.Controllers
             return Ok();
         }
 
-        [HttpGet("/missingposts")]
+        [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest request)
         {
             try
@@ -57,7 +58,7 @@ namespace MissingZoneApi.Controllers
                     .Take(request.PageSize)
                     .ToList();
 
-                return Ok(new
+                return Ok(new PayloadResponse<MissingPost>
                 {
                     TotalCount = totalCount,
                     PageNumber = request.PageNumber,
@@ -72,7 +73,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        [HttpGet("/missingpost/{id}")]
+        [HttpGet("/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var missingPost = await _missingPost.Read(id);
@@ -84,7 +85,7 @@ namespace MissingZoneApi.Controllers
         }
 
 
-        [HttpDelete("/missingpost/delete/{id}")]
+        [HttpDelete("/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var missingPost = await _missingPost.Read(id);

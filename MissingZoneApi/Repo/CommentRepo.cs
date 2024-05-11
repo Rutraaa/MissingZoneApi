@@ -13,4 +13,20 @@ public class CommentRepo : IComment
     {
         _mzonedbContext = mzonedbContext;
     }
+
+    public async Task Verify(int commentId)
+    {
+        try
+        {
+            Comment comment = await _mzonedbContext.Comments.FirstAsync(item => item.CommentId == commentId);
+            comment.IsVerified = true;
+            await _mzonedbContext.SaveChangesAsync();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }

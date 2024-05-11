@@ -36,7 +36,7 @@ public class AdminRepo : IAdmin
         } 
     }
 
-    public LoginResponse CheckIsExist(LoginRequest userLogin)
+    public LoginResult CheckIsExist(LoginRequest userLogin)
     {
         try
         {
@@ -44,16 +44,16 @@ public class AdminRepo : IAdmin
                 .Any(item => item.Email == userLogin.Email);
             if (!isExist)
             {
-                return new LoginResponse { IsExist = isExist, Messsage = string.Empty };
+                return new LoginResult { IsExist = isExist, Messsage = string.Empty };
             }
             isExist = _mzonedbContext.Admins
                 .Any(item => item.Password == userLogin.Password);
             if (!isExist)
             {
-                return new LoginResponse { IsExist = isExist, Messsage = "Wrong password" };
+                return new LoginResult { IsExist = isExist, Messsage = "Wrong password" };
             }
 
-            return new LoginResponse { IsExist = isExist, Messsage = string.Empty}; ;
+            return new LoginResult { IsExist = isExist, Messsage = string.Empty}; ;
         }
         catch (Exception e)
         {

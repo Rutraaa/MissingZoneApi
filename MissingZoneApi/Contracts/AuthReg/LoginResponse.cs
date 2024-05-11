@@ -2,6 +2,6 @@
 
 public class LoginResponse
 {
-    public bool IsExist { get; set; }
-    public string Messsage { get; set; }
+    public string Token { get; set; }
+    public string Role { get; set; }
 }
