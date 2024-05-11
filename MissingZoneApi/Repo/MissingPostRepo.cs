@@ -39,7 +39,7 @@ public class MissingPostRepo : IMissingPost
             }
 
             List<string> photos = await _mzonedbContext.Photos
-                .Where(item => item.MissingPostId == missingPost.MissingPostId).Select(item => item.Content);
+                .Where(item => item.MissingPostId == missingPost.MissingPostId).Select(item => item.Content).ToListAsync();
 
             MissingPostInfo result = new MissingPostInfo
             {

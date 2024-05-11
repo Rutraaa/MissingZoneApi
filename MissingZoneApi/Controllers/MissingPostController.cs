@@ -61,7 +61,7 @@ namespace MissingZoneApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PageData pageData)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest pageData)
         {
             try
             {
@@ -69,14 +69,14 @@ namespace MissingZoneApi.Controllers
                 var paginationService = new PaginationService<MissingPost>();
                 var pagedResponse = await paginationService.GetPagedDataAsync(missingPosts, pageData);
 
-                var filteredPosts = pagedResponse.Data.AsQueryable();
+                var filteredPosts = (IEnumerable<MissingPost>)pagedResponse.Data;
 
                 if (pageData.BirthDate.HasValue)
                 {
                     var birthDate = pageData.BirthDate.Value.Date; // Відсікати час, лише дата
                     filteredPosts = filteredPosts.Where(post =>
                         post.BirthDate.HasValue &&
-                        post.BirthDate.Value.Date.ToShortDateString() == birthDate.ToShortDateString());
+                        post.BirthDate.Value.ToShortDateString() == birthDate.ToShortDateString());
                 }
 
                 if (!string.IsNullOrEmpty(pageData.FirstName))
