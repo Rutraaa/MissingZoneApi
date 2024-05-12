@@ -72,6 +72,7 @@ public class MissingPostRepo : IMissingPost
         List<MissingPostInfo> result = list.Join(listPhotos, post => post.MissingPostId, list => list.MissingPostId,
             (post, list) => new MissingPostInfo
             {
+                MissingPostId = post.MissingPostId,
                 Title = post.Title,
                 Description = post.Description,
                 ContactInfo = post.ContactInfo,

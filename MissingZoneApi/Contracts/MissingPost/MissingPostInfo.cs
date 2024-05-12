@@ -5,6 +5,7 @@ namespace MissingZoneApi.Contracts.MissingPost;
 
 public class MissingPostInfo
 {
+    public int MissingPostId { get; set; }
     public string Title { get; set; }
 
     public string Description { get; set; }
