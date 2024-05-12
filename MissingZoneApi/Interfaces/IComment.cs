@@ -1,6 +1,4 @@
-﻿using MissingZoneApi.Contracts.Admin;
-using MissingZoneApi.Contracts.Comments;
-using MissingZoneApi.Entities;
+﻿using MissingZoneApi.Contracts.Comments;
 
 namespace MissingZoneApi.Interfaces;
 

@@ -1,9 +1,5 @@
-﻿using MissingZoneApi.Contracts.Admin;
-using MissingZoneApi.Entities;
-
-namespace MissingZoneApi.Interfaces;
+﻿namespace MissingZoneApi.Interfaces;
 
 public interface IMp2v
 {
-    
 }

@@ -57,10 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<mzonedbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
+builder.Services.AddDbContext<mzonedbContext>(options => { options.UseSqlServer(connectionString); });
 
 builder.Services.AddScoped<IAdmin, AdminRepo>();
 builder.Services.AddScoped<IComment, CommentRepo>();

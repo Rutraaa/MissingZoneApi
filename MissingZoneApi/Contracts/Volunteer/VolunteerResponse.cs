@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MissingZoneApi.Contracts.Admin;
+﻿namespace MissingZoneApi.Contracts.Admin;
 
 public class VolunteerGetResponse
 {

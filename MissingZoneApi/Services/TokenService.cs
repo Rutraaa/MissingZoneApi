@@ -16,14 +16,14 @@ public class TokenService
 
     public string CreateToken(string email)
     {
-        List<Claim> claims = new List<Claim>
+        var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Email, email)
+            new(ClaimTypes.Email, email)
         };
         try
         {
             var tokenKey = _configuration.GetSection("AppSettings:Token").Value;
-            var keyBytes = System.Text.Encoding.UTF8.GetBytes(tokenKey);
+            var keyBytes = Encoding.UTF8.GetBytes(tokenKey);
             var key = new SymmetricSecurityKey(keyBytes);
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.Aes128CbcHmacSha256);

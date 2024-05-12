@@ -4,77 +4,76 @@ using Microsoft.AspNetCore.Mvc;
 using MissingZoneApi.Contracts.Comments;
 using MissingZoneApi.Interfaces;
 
-namespace MissingZoneApi.Controllers
+namespace MissingZoneApi.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class CommentController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class CommentController : ControllerBase
+    private readonly IComment _comment;
+
+    public CommentController(IComment comment)
     {
-        private readonly IComment _comment;
+        _comment = comment;
+    }
 
-        public CommentController(IComment comment)
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpPost("/{commentId}")]
+    public async Task<IActionResult> VerifyComment(int commentId)
+    {
+        try
         {
-            _comment = comment;
+            _comment.Verify(commentId);
+            return Ok();
         }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost("/{commentId}")]
-        public async Task<IActionResult> VerifyComment(int commentId)
+        catch (Exception e)
         {
-            try
-            {
-                _comment.Verify(commentId);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
+            return BadRequest();
         }
+    }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet("/anonim")]
-        public async Task<IActionResult> GetAnomimListForAdmin()
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpGet("/anonim")]
+    public async Task<IActionResult> GetAnomimListForAdmin()
+    {
+        try
         {
-            try
-            {
-                List<CommentInfo> response = await _comment.GetAnomimList();
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
+            var response = await _comment.GetAnomimList();
+            return Ok(response);
         }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet("/{missingPostId}")]
-        public async Task<IActionResult> GetList(int missingPostId)
+        catch (Exception e)
         {
-            try
-            {
-                List<CommentInfo> response = await _comment.GetList(missingPostId);
-                return Ok(response);
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
+            return BadRequest();
         }
+    }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost]
-        public async Task<IActionResult> CreateComment([FromBody] CommentRequest request)
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpGet("/{missingPostId}")]
+    public async Task<IActionResult> GetList(int missingPostId)
+    {
+        try
         {
-            try
-            {
-                await _comment.Create(request);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest();
-            }
+            var response = await _comment.GetList(missingPostId);
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
+        }
+    }
+
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpPost]
+    public async Task<IActionResult> CreateComment([FromBody] CommentRequest request)
+    {
+        try
+        {
+            await _comment.Create(request);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest();
         }
     }
 }

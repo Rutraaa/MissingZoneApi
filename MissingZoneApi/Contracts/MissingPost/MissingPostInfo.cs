@@ -1,7 +1,4 @@
-﻿using MissingZoneApi.Entities;
-using System.ComponentModel.DataAnnotations;
-
-namespace MissingZoneApi.Contracts.MissingPost;
+﻿namespace MissingZoneApi.Contracts.MissingPost;
 
 public class MissingPostInfo
 {

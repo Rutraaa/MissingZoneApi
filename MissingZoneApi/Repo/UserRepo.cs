@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.Admin;
@@ -22,15 +21,14 @@ public class UserRepo : IUser
     {
         try
         {
-            User userMe = await _mzonedbContext.Users.FirstAsync(item => item.Email == email);
+            var userMe = await _mzonedbContext.Users.FirstAsync(item => item.Email == email);
             return new UserGetResponse
             {
                 Email = userMe.Email,
                 FirstName = userMe.FirstName,
                 LastName = userMe.LastName,
-                Phone = userMe.Phone,
+                Phone = userMe.Phone
             };
-
         }
         catch (Exception e)
         {
@@ -43,10 +41,10 @@ public class UserRepo : IUser
     {
         try
         {
-            List<User> users = await _mzonedbContext.Users.ToListAsync();
+            var users = await _mzonedbContext.Users.ToListAsync();
 
-            int totalCount = users.Count();
-            int totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
+            var totalCount = users.Count();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
 
             var filteredList = users.Where(item => item.IsVerified == false)
                 .Skip((pageData.PageNumber - 1) * pageData.PageSize)
@@ -79,10 +77,9 @@ public class UserRepo : IUser
     {
         try
         {
-            User user = await _mzonedbContext.Users.FirstAsync(item => item.Email == email);
+            var user = await _mzonedbContext.Users.FirstAsync(item => item.Email == email);
             user.IsVerified = false;
             await _mzonedbContext.SaveChangesAsync();
-
         }
         catch (Exception e)
         {
@@ -95,20 +92,15 @@ public class UserRepo : IUser
     {
         try
         {
-            bool isExist = _mzonedbContext.Users
+            var isExist = _mzonedbContext.Users
                 .Any(item => item.Email == userLogin.Email);
-            if (!isExist)
-            {
-                return new LoginResult { IsExist = isExist, Messsage = string.Empty };
-            }
+            if (!isExist) return new LoginResult { IsExist = isExist, Messsage = string.Empty };
             isExist = _mzonedbContext.Users
                 .Any(item => item.Password == userLogin.Password);
-            if (!isExist)
-            {
-                return new LoginResult { IsExist = isExist, Messsage = "Wrong password" };
-            }
+            if (!isExist) return new LoginResult { IsExist = isExist, Messsage = "Wrong password" };
 
-            return new LoginResult { IsExist = isExist, Messsage = string.Empty }; ;
+            return new LoginResult { IsExist = isExist, Messsage = string.Empty };
+            ;
         }
         catch (Exception e)
         {

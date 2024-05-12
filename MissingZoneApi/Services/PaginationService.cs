@@ -1,35 +1,34 @@
 ﻿using MissingZoneApi.Contracts;
 using MissingZoneApi.Interfaces;
 
-namespace MissingZoneApi.Services
+namespace MissingZoneApi.Services;
+
+public class PaginationService<T> : IPaginationService<T>
 {
-    public class PaginationService<T> : IPaginationService<T>
+    public async Task<PayloadResponse<T>> GetPagedDataAsync(IEnumerable<T> data, PageData pageData)
     {
-        public async Task<PayloadResponse<T>> GetPagedDataAsync(IEnumerable<T> data, PageData pageData)
+        try
         {
-            try
-            {
-                int totalCount = data.Count();
-                int totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
+            var totalCount = data.Count();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
 
-                var pagedData = data
-                    .Skip((pageData.PageNumber - 1) * pageData.PageSize)
-                    .Take(pageData.PageSize)
-                    .ToList();
+            var pagedData = data
+                .Skip((pageData.PageNumber - 1) * pageData.PageSize)
+                .Take(pageData.PageSize)
+                .ToList();
 
-                return new PayloadResponse<T>
-                {
-                    TotalCount = totalCount,
-                    PageNumber = pageData.PageNumber,
-                    PageSize = pageData.PageSize,
-                    TotalPages = totalPages,
-                    Data = pagedData
-                };
-            }
-            catch (Exception ex)
+            return new PayloadResponse<T>
             {
-                throw new Exception($"Failed to paginate data: {ex.Message}", ex);
-            }
+                TotalCount = totalCount,
+                PageNumber = pageData.PageNumber,
+                PageSize = pageData.PageSize,
+                TotalPages = totalPages,
+                Data = pagedData
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Failed to paginate data: {ex.Message}", ex);
         }
     }
 }

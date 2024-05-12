@@ -1,6 +1,4 @@
-﻿using MissingZoneApi.Contracts.Admin;
-using MissingZoneApi.Contracts.AuthReg;
-using MissingZoneApi.Entities;
+﻿using MissingZoneApi.Contracts.AuthReg;
 
 namespace MissingZoneApi.Interfaces;
 

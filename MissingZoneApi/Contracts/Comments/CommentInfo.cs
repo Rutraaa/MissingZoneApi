@@ -5,6 +5,7 @@ namespace MissingZoneApi.Contracts.Comments;
 public class CommentInfo
 {
     public int CommnetId { get; set; }
+
     [Required(ErrorMessage = "First name is required")]
     public string FirstName { get; set; }
 

@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.EntityFrameworkCore;
 using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.Admin;
 using MissingZoneApi.Contracts.AuthReg;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
-using System.Text;
 
 namespace MissingZoneApi.Repo;
 
@@ -16,19 +16,19 @@ public class VolunteerRepo : IVolunteer
     {
         _mzonedbContext = mzonedbContext;
     }
+
     public async Task<VolunteerGetResponse> GetMe(string email)
     {
         try
         {
-            Volunteer volunteerMe = await _mzonedbContext.Volunteers.FirstAsync(item => item.Email == email);
+            var volunteerMe = await _mzonedbContext.Volunteers.FirstAsync(item => item.Email == email);
             return new VolunteerGetResponse
             {
                 Email = volunteerMe.Email,
                 FirstName = volunteerMe.FirstName,
                 LastName = volunteerMe.LastName,
-                Phone = volunteerMe.Phone,
+                Phone = volunteerMe.Phone
             };
-
         }
         catch (Exception e)
         {
@@ -39,10 +39,10 @@ public class VolunteerRepo : IVolunteer
 
     public async Task<PayloadResponse<VolunteerInfo>> GetAll(PageData pageData)
     {
-        List<Volunteer> volunteers = await _mzonedbContext.Volunteers.ToListAsync();
+        var volunteers = await _mzonedbContext.Volunteers.ToListAsync();
 
-        int totalCount = volunteers.Count();
-        int totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
+        var totalCount = volunteers.Count();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
 
         var filteredList = volunteers.Where(item => item.IsVerified == false)
             .Skip((pageData.PageNumber - 1) * pageData.PageSize)
@@ -70,10 +70,9 @@ public class VolunteerRepo : IVolunteer
     {
         try
         {
-            Volunteer volunteer = await _mzonedbContext.Volunteers.FirstAsync(item => item.Email == email);
+            var volunteer = await _mzonedbContext.Volunteers.FirstAsync(item => item.Email == email);
             volunteer.IsVerified = true;
             await _mzonedbContext.SaveChangesAsync();
-
         }
         catch (Exception e)
         {
@@ -86,20 +85,15 @@ public class VolunteerRepo : IVolunteer
     {
         try
         {
-            bool isExist = _mzonedbContext.Volunteers
+            var isExist = _mzonedbContext.Volunteers
                 .Any(item => item.Email == userLogin.Email);
-            if (!isExist)
-            {
-                return new LoginResult { IsExist = isExist, Messsage = string.Empty };
-            }
+            if (!isExist) return new LoginResult { IsExist = isExist, Messsage = string.Empty };
             isExist = _mzonedbContext.Volunteers
                 .Any(item => item.Password == userLogin.Password);
-            if (!isExist)
-            {
-                return new LoginResult { IsExist = isExist, Messsage = "Wrong password" };
-            }
+            if (!isExist) return new LoginResult { IsExist = isExist, Messsage = "Wrong password" };
 
-            return new LoginResult { IsExist = isExist, Messsage = string.Empty }; ;
+            return new LoginResult { IsExist = isExist, Messsage = string.Empty };
+            ;
         }
         catch (Exception e)
         {

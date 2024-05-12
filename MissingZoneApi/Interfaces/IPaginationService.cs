@@ -1,9 +1,8 @@
 ﻿using MissingZoneApi.Contracts;
 
-namespace MissingZoneApi.Interfaces
+namespace MissingZoneApi.Interfaces;
+
+public interface IPaginationService<T>
 {
-    public interface IPaginationService<T>
-    {
-        Task<PayloadResponse<T>> GetPagedDataAsync(IEnumerable<T> data, PageData pageData);
-    }
+    Task<PayloadResponse<T>> GetPagedDataAsync(IEnumerable<T> data, PageData pageData);
 }

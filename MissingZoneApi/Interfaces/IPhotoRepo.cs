@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MissingZoneApi.Entities;
+﻿using MissingZoneApi.Entities;
 
-namespace MissingZoneApi.Interfaces
+namespace MissingZoneApi.Interfaces;
+
+public interface IPhotoRepo
 {
-    public interface IPhotoRepo
-    {
-        Task Create(Photo photo);
-    }
+    Task Create(Photo photo);
 }

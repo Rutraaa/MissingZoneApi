@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MissingZoneApi.Contracts;
 using MissingZoneApi.Contracts.MissingPost;
 using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
@@ -31,17 +30,15 @@ public class MissingPostRepo : IMissingPost
     {
         try
         {
-            MissingPost missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
+            var missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
 
-            if (missingPost == null)
-            {
-                throw new ArgumentException("Missing post not found");
-            }
+            if (missingPost == null) throw new ArgumentException("Missing post not found");
 
-            List<string> photos = await _mzonedbContext.Photos
-                .Where(item => item.MissingPostId == missingPost.MissingPostId).Select(item => item.Content).ToListAsync();
+            var photos = await _mzonedbContext.Photos
+                .Where(item => item.MissingPostId == missingPost.MissingPostId).Select(item => item.Content)
+                .ToListAsync();
 
-            MissingPostInfo result = new MissingPostInfo
+            var result = new MissingPostInfo
             {
                 Title = missingPost.Title,
                 Description = missingPost.Description,
@@ -69,33 +66,30 @@ public class MissingPostRepo : IMissingPost
     public async Task<List<MissingPostInfo>> InsertPhotos(List<MissingPost> list)
     {
         var listPhotos = _mzonedbContext.Photos.ToList();
-        List<MissingPostInfo> result = list.Select(item => new MissingPostInfo
-            {
-                MissingPostId = item.MissingPostId,
-                Title = item.Title,
-                Description = item.Description,
-                ContactInfo = item.ContactInfo,
-                UserId = item.UserId,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                FatherName = item.FatherName,
-                BirthDate = item.BirthDate,
-                CreateDate = item.CreateDate,
-                City = item.City,
-                Coordinates = item.Coordinates,
-                PrePhoto = listPhotos.First(item =>item.MissingPostId == item.MissingPostId).Content
+        var result = list.Select(item => new MissingPostInfo
+        {
+            MissingPostId = item.MissingPostId,
+            Title = item.Title,
+            Description = item.Description,
+            ContactInfo = item.ContactInfo,
+            UserId = item.UserId,
+            FirstName = item.FirstName,
+            LastName = item.LastName,
+            FatherName = item.FatherName,
+            BirthDate = item.BirthDate,
+            CreateDate = item.CreateDate,
+            City = item.City,
+            Coordinates = item.Coordinates,
+            PrePhoto = listPhotos.First(item => item.MissingPostId == item.MissingPostId).Content
         }).ToList();
         return result;
     }
 
     public async Task Delete(int id)
     {
-        MissingPost missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
+        var missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
 
-        if (missingPost == null)
-        {
-            throw new ArgumentException("Missing post not found");
-        }
+        if (missingPost == null) throw new ArgumentException("Missing post not found");
 
         _mzonedbContext.MissingPosts.Remove(missingPost);
         await _mzonedbContext.SaveChangesAsync();
@@ -103,18 +97,15 @@ public class MissingPostRepo : IMissingPost
 
     public async Task<int?> GetIdByDate(DateTime createdDate)
     {
-        MissingPost missingPost = await _mzonedbContext.MissingPosts.FirstOrDefaultAsync(x=>x.CreateDate == createdDate);
+        var missingPost = await _mzonedbContext.MissingPosts.FirstOrDefaultAsync(x => x.CreateDate == createdDate);
         return missingPost?.MissingPostId;
     }
 
     public async Task<MissingPost> Read(int id)
     {
-        MissingPost missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
+        var missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
 
-        if (missingPost == null)
-        {
-            throw new ArgumentException("Missing post not found");
-        }
+        if (missingPost == null) throw new ArgumentException("Missing post not found");
 
         return missingPost;
     }

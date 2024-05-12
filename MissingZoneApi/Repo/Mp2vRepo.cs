@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MissingZoneApi.Contracts.Admin;
-using MissingZoneApi.Entities;
+﻿using MissingZoneApi.Entities;
 using MissingZoneApi.Interfaces;
 
 namespace MissingZoneApi.Repo;
