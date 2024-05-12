@@ -68,8 +68,7 @@ namespace MissingZoneApi.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return BadRequest(e.Message);
             }
         }
 

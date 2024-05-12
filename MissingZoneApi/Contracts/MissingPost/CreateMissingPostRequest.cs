@@ -9,9 +9,6 @@ namespace MissingZoneApi.Contracts.MissingPost
 
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
-
-        [Required(ErrorMessage = "Contents is required")]
-        [MinLength(1, ErrorMessage = "Contents must have at least 1 item")]
         public List<string> Contents { get; set; }
 
         [Required(ErrorMessage = "Coordinates is required")]
@@ -32,7 +29,6 @@ namespace MissingZoneApi.Contracts.MissingPost
 
         public string FatherName { get; set; }
 
-        [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
 
         [Required(ErrorMessage = "City is required")]
