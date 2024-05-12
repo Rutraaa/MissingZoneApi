@@ -33,12 +33,12 @@ namespace MissingZoneApi.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet("anonim/{missingPostId}")]
-        public async Task<IActionResult> GetAnomimList(int missingPostId)
+        [HttpGet("/anonim")]
+        public async Task<IActionResult> GetAnomimListForAdmin()
         {
             try
             {
-                List<CommentInfo> response = await _comment.GetAnomimList(missingPostId);
+                List<CommentInfo> response = await _comment.GetAnomimList();
                 return Ok(response);
             }
             catch (Exception e)

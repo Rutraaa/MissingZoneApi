@@ -31,10 +31,10 @@ public class CommentRepo : IComment
         }
     }
 
-    public async Task<List<CommentInfo>> GetAnomimList(int misssingId)
+    public async Task<List<CommentInfo>> GetAnomimList()
     {
         List<Comment> list = await _mzonedbContext.Comments
-            .Where(item => item.MissingPostId == misssingId && item.IsVerified == false).ToListAsync();
+            .Where(item => item.IsVerified == false).ToListAsync();
         List<User> listUsers = await _mzonedbContext.Users.ToListAsync();
         var result = list.Join(listUsers, comment => comment.UserId, user => user.Email, (comment, user) =>
             new CommentInfo
