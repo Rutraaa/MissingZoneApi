@@ -15,6 +15,5 @@ public class CommentInfo
     [Required(ErrorMessage = "Comment is required")]
     public string Comment { get; set; }
 
-    [Required(ErrorMessage = "Created date is required")]
     public DateTime CreatedDate { get; set; }
 }

@@ -23,6 +23,5 @@ public class RegistrationRequest
     [RegularExpression(@"^\+380\d{9}$", ErrorMessage = "Invalid phone number")]
     public string Phone { get; set; }
 
-    [Required(ErrorMessage = "Organization name is required")]
     public string OrganizationName { get; set; }
 }
