@@ -25,46 +25,54 @@ namespace MissingZoneApi.Controllers
 
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMissingPostRequest model)
         {
-            var createdDate = DateTime.Now;
-
-            var missingPost = new MissingPost
+            try
             {
-                Title = model.Title,
-                Description = model.Description,
-                ContactInfo = model.ContactInfo,
-                UserId = model.UserId,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Coordinates = string.Join(",", model.Coordinates),
-                FatherName = model.FatherName,
-                BirthDate = model.BirthDate,
-                CreateDate = createdDate,
-                City = model.City
-            };
+                var createdDate = DateTime.Now;
 
-            await _missingPost.Create(missingPost);
-
-            var missingPostsId = await _missingPost.GetIdByDate(createdDate);
-
-            foreach (var content in model.Contents)
-            {
-                var photo = new Photo()
+                var missingPost = new MissingPost
                 {
-                    MissingPostId = missingPostsId,
-                    Content = content
+                    Title = model.Title,
+                    Description = model.Description,
+                    ContactInfo = model.ContactInfo,
+                    UserId = model.UserId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Coordinates = string.Join(",", model.Coordinates),
+                    FatherName = model.FatherName,
+                    BirthDate = model.BirthDate,
+                    CreateDate = createdDate,
+                    City = model.City
                 };
 
-                await _photo.Create(photo);
-            }
+                await _missingPost.Create(missingPost);
 
-            return Ok();
+                var missingPostsId = await _missingPost.GetIdByDate(createdDate);
+
+                foreach (var content in model.Contents)
+                {
+                    var photo = new Photo()
+                    {
+                        MissingPostId = missingPostsId,
+                        Content = content
+                    };
+
+                    await _photo.Create(photo);
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest pageData)
         {
@@ -84,30 +92,46 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var missingPost = await _missingPost.Get(id);
-            if (missingPost == null)
+            try
             {
-                return NotFound("Missing post not found");
+                var missingPost = await _missingPost.Get(id);
+                if (missingPost == null)
+                {
+                    return NotFound("Missing post not found");
+                }
+                return Ok(missingPost);
             }
-            return Ok(missingPost);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var missingPost = await _missingPost.Read(id);
-            if (missingPost == null)
+            try
             {
-                return NotFound("Missing post not found");
-            }
+                var missingPost = await _missingPost.Read(id);
+                if (missingPost == null)
+                {
+                    return NotFound("Missing post not found");
+                }
 
-            await _missingPost.Delete(id);
-            return Ok("Missing post deleted successfully");
+                await _missingPost.Delete(id);
+                return Ok("Missing post deleted successfully");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

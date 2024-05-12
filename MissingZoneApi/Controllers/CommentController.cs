@@ -20,32 +20,64 @@ namespace MissingZoneApi.Controllers
         [HttpPost("/{commentId}")]
         public async Task<IActionResult> VerifyComment(int commentId)
         {
-            _comment.Verify(commentId);
-            return Ok();
+            try
+            {
+                _comment.Verify(commentId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [Authorize]
         [HttpGet("anonim/{missingPostId}")]
         public async Task<IActionResult> GetAnomimList(int missingPostId)
         {
-           List<CommentInfo> response = await _comment.GetAnomimList(missingPostId);
-           return Ok(response);
+            try
+            {
+                List<CommentInfo> response = await _comment.GetAnomimList(missingPostId);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [Authorize]
         [HttpGet("/{missingPostId}")]
         public async Task<IActionResult> GetList(int missingPostId)
         {
-            List<CommentInfo> response = await _comment.GetList(missingPostId);
-            return Ok(response);
+            try
+            {
+                List<CommentInfo> response = await _comment.GetList(missingPostId);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateComment([FromBody] CommentRequest request)
         {
-            await _comment.Create(request);
-            return Ok();
+            try
+            {
+                await _comment.Create(request);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

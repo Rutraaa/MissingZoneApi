@@ -110,18 +110,26 @@ public class VolunteerRepo : IVolunteer
 
     public async Task Create(RegistrationRequest registration)
     {
-        await _mzonedbContext.Volunteers.AddRangeAsync(new Volunteer
+        try
         {
-            Email = registration.Email,
-            Password = registration.Password,
-            FirstName = registration.FirstName,
-            LastName = registration.LastName,
-            Photo = Encoding.UTF8.GetBytes(registration.Photo),
-            IsVerified = false,
-            OrganizationName = registration.OrganizationName,
-            Phone = registration.Phone
-        });
+            await _mzonedbContext.Volunteers.AddRangeAsync(new Volunteer
+            {
+                Email = registration.Email,
+                Password = registration.Password,
+                FirstName = registration.FirstName,
+                LastName = registration.LastName,
+                Photo = Encoding.UTF8.GetBytes(registration.Photo),
+                IsVerified = false,
+                OrganizationName = registration.OrganizationName,
+                Phone = registration.Phone
+            });
 
-        await _mzonedbContext.SaveChangesAsync();
+            await _mzonedbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
