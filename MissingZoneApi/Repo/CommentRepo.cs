@@ -39,6 +39,7 @@ public class CommentRepo : IComment
         var result = list.Join(listUsers, comment => comment.UserId, user => user.Email, (comment, user) =>
             new CommentInfo
             {
+                CommnetId = comment.CommentId,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 OrganizationName = null,
