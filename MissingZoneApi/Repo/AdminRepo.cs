@@ -15,27 +15,6 @@ public class AdminRepo : IAdmin
         _mzonedbContext = mzonedbContext;
     }
 
-    public async Task<AdminGetResponse> GetMe(string email)
-    {
-        try
-        {
-            Admin adminMe = await _mzonedbContext.Admins.FirstAsync(item => item.Email == email);
-            return new AdminGetResponse
-            {
-                Email = adminMe.Email,
-                FirstName = adminMe.FirstName,
-                LastName = adminMe.LastName,
-                OrganizationName = adminMe.OrganizationName,
-            };
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        } 
-    }
-
     public LoginResult CheckIsExist(LoginRequest userLogin)
     {
         try

@@ -6,6 +6,5 @@ namespace MissingZoneApi.Interfaces;
 
 public interface IAdmin
 {
-    Task<AdminGetResponse> GetMe(string adminEmail);
     LoginResult CheckIsExist(LoginRequest userLogin);
 }
