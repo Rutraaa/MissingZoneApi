@@ -68,8 +68,8 @@ public class MissingPostRepo : IMissingPost
 
     public async Task<List<MissingPostInfo>> InsertPhotos(List<MissingPost> list)
     {
-        var listPhotos = await _mzonedbContext.Photos.GroupBy(item => item.MissingPostId).ToListAsync();
-        List<MissingPostInfo> result = list.Join(listPhotos, post => post.MissingPostId, list => list.Key,
+        var listPhotos = _mzonedbContext.Photos.ToList();
+        List<MissingPostInfo> result = list.Join(listPhotos, post => post.MissingPostId, list => list.MissingPostId,
             (post, list) => new MissingPostInfo
             {
                 Title = post.Title,
@@ -83,7 +83,7 @@ public class MissingPostRepo : IMissingPost
                 CreateDate = post.CreateDate,
                 City = post.City,
                 Coordinates = post.Coordinates,
-                Photos = list.Select(item => item.Content).ToList()
+                PrePhoto = list.Content
             }).ToList();
         return result;
     }

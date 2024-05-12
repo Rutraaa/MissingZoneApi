@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MissingZoneApi.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace MissingZoneApi.Contracts.MissingPost;
 
@@ -27,4 +28,5 @@ public class MissingPostInfo
     public string Coordinates { get; set; }
 
     public List<string> Photos { get; set; }
+    public string PrePhoto { get; set; }
 }
