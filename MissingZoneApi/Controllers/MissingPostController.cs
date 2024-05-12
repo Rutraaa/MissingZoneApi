@@ -84,6 +84,17 @@ namespace MissingZoneApi.Controllers
                 var paginationService = new PaginationService<MissingPost>();
                 var pagedResponse = await paginationService.GetPagedDataAsync(filteredPosts, pageData);
 
+                var newList = await _missingPost.InsertPhotos(pagedResponse.Data);
+
+                PayloadResponse<MissingPostInfo> response = new PayloadResponse<MissingPostInfo>
+                {
+                    TotalCount = pagedResponse.TotalCount,
+                    PageNumber = pagedResponse.PageNumber,
+                    PageSize = pagedResponse.PageSize,
+                    TotalPages = pagedResponse.TotalPages,
+                    Data = newList
+                };
+
                 return Ok(pagedResponse);
             }
             catch (Exception ex)

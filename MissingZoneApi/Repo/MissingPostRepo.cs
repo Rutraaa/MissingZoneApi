@@ -66,6 +66,28 @@ public class MissingPostRepo : IMissingPost
         }
     }
 
+    public async Task<List<MissingPostInfo>> InsertPhotos(List<MissingPost> list)
+    {
+        var listPhotos = await _mzonedbContext.Photos.GroupBy(item => item.MissingPostId).ToListAsync();
+        List<MissingPostInfo> result = list.Join(listPhotos, post => post.MissingPostId, list => list.Key,
+            (post, list) => new MissingPostInfo
+            {
+                Title = post.Title,
+                Description = post.Description,
+                ContactInfo = post.ContactInfo,
+                UserId = post.UserId,
+                FirstName = post.FirstName,
+                LastName = post.LastName,
+                FatherName = post.FatherName,
+                BirthDate = post.BirthDate,
+                CreateDate = post.CreateDate,
+                City = post.City,
+                Coordinates = post.Coordinates,
+                Photos = list.Select(item => item.Content).ToList()
+            }).ToList();
+        return result;
+    }
+
     public async Task Delete(int id)
     {
         MissingPost missingPost = await _mzonedbContext.MissingPosts.FindAsync(id);
