@@ -1,9 +1,30 @@
+# MizzingZone Web API
+
+## Introduction
+Welcome to MizzingZone, a robust .NET Web API designed to address the critical need for tracking individuals lost in combat zones. Powered by the dynamic duo of Entity Framework Core for seamless data management and AWS RDS MS SQL for secure and scalable database hosting, MizzingZone stands tall as a beacon of hope for organizations, rescuers, and civilians alike. This README serves as your compass, guiding you through the intricacies of MizzingZone's purpose, features, setup instructions, and usage guidelines.
+
+## Purpose
+In the tumultuous landscape of combat zones, every second counts in the search for missing persons. MizzingZone emerges as a steadfast ally, offering a centralized platform for the meticulous tracking and management of lost individuals. By harnessing the collective power of organizations, rescuers, and civilians, MizzingZone aims to expedite the process of gathering, sharing, and updating crucial information about missing persons, thereby amplifying the chances of successful rescue and reunion.
+
+## Features
+- **Entity Framework Core:** MizzingZone boasts the robust capabilities of Entity Framework Core, empowering users with efficient data management functionalities, including seamless database access, flexible querying, and agile data manipulation.
+- **AWS RDS MS SQL:** Hosted on the resilient infrastructure of AWS RDS MS SQL, MizzingZone's database ensures unparalleled reliability, scalability, and security, safeguarding sensitive information with military-grade fortitude.
+- **Azure Hosting and Deployment:** MizzingZone finds its home in the azure skies of Azure, leveraging its cutting-edge hosting and deployment services for a seamless user experience and effortless integration with Azure's expansive ecosystem.
+- **Information Management:** From the front lines to the homefront, MizzingZone enables users to submit, retrieve, update, and delete vital information about missing persons, aggregating data from diverse sources, including organizations, rescuers, and concerned civilians.
+- **Role-based Access Control:** MizzingZone enforces strict role-based access control mechanisms, ensuring that only authorized users wield the power to add new entries, update existing records, and navigate the labyrinth of functionalities with precision and purpose.
+
+## Setup Instructions
+Prepare to embark on your journey with MizzingZone by following these meticulous setup instructions:
+
+1. **Clone the Repository:** Rally your forces and clone the MizzingZone repository to your local machine or server, forging a connection to the heart of the project's source code.
+ 
+2. **Install Dependencies:** Arm yourself with the necessary dependencies by navigating to the project directory and invoking the mystical powers of NuGet Package Manager to restore order and coherence.
 
 3. **Configure Database Connection:** Fortify the database connection by updating the sacred connection string in the hallowed halls of the `appsettings.json` file, forging a bond with your AWS RDS MS SQL database.
 
 4. **Build and Run:** Sound the horns of readiness as you muster your troops, building the project and unleashing the Web API upon the world with the rallying cry of `dotnet build` and `dotnet run`.
 
-5. **Access the API:** With the Web API deployed and standing tall, seize the moment and access its powers through the designated base URL (e.g., http://localhost:5000), embarking on your quest with purpose and resolve.
+5. **Access the API:** With the Web API deployed and standing tall, seize the moment and access its powers through the designated base URL (e.g., [https://missingzoneapi20240511172347.azurewebsites.net/swagger/index.html]), embarking on your quest with purpose and resolve.
 
 ## Usage Guidelines
 Navigate the treacherous terrain of MizzingZone with poise and precision, adhering to these guiding principles:
