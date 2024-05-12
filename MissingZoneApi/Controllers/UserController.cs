@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MissingZoneApi.Contracts;
@@ -16,7 +17,7 @@ namespace MissingZoneApi.Controllers
         {
             _user = user;
         }
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers([FromQuery] PageData pageData)
         {
@@ -24,7 +25,7 @@ namespace MissingZoneApi.Controllers
             return Ok(response);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("/verifyUser/{email}")]
         public async Task<IActionResult> VerifyUser(string email)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MissingZoneApi.Contracts;
@@ -25,7 +26,7 @@ namespace MissingZoneApi.Controllers
 
         }
 
-        //[Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMissingPostRequest model)
         {
@@ -72,7 +73,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest pageData)
         {
@@ -92,7 +93,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -112,7 +113,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -24,13 +24,9 @@ public class TokenService
         {
             var tokenKey = _configuration.GetSection("AppSettings:Token").Value;
             var keyBytes = System.Text.Encoding.UTF8.GetBytes(tokenKey);
-            if (keyBytes.Length < 64)
-            {
-                Array.Resize(ref keyBytes, 64);
-            }
             var key = new SymmetricSecurityKey(keyBytes);
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.Aes128CbcHmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
