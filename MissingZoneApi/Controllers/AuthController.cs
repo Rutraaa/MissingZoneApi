@@ -29,69 +29,85 @@ namespace MissingZoneApi.Controllers
         [Route("registration")]
         public async Task<IActionResult> Registration([FromBody] RegistrationRequest request)
         {
-            if (request.OrganizationName.IsNullOrEmpty())
+            try
             {
-                bool isExist = _user.CheckIsExist(new LoginRequest { Email = request.Email, Password = request.Password }).IsExist;
-                if (isExist)
+                if (request.OrganizationName.IsNullOrEmpty())
                 {
-                    return BadRequest("Current email does exist");
+                    bool isExist = _user.CheckIsExist(new LoginRequest { Email = request.Email, Password = request.Password }).IsExist;
+                    if (isExist)
+                    {
+                        return BadRequest("Current email does exist");
+                    }
+                    await _user.Create(request);
                 }
-                await _user.Create(request);
-            }
-            else
-            {
-                bool isExist = _volunteer.CheckIsExist(new LoginRequest{Email = request.Email, Password = request.Password}).IsExist;
-                if (isExist)
+                else
                 {
-                    return BadRequest("Current email does exist");
+                    bool isExist = _volunteer.CheckIsExist(new LoginRequest { Email = request.Email, Password = request.Password }).IsExist;
+                    if (isExist)
+                    {
+                        return BadRequest("Current email does exist");
+                    }
+                    await _volunteer.Create(request);
                 }
-                await _volunteer.Create(request);
-            }
 
-            return Ok();
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<LoginResponse>> LoginUser([FromBody]LoginRequest userLogin)
         {
-            LoginResult isAdmin = _admin.CheckIsExist(userLogin);
-
-            if (isAdmin.IsExist)
+            try
             {
-                TokenService tokenService = new TokenService(_configuration);
-                string token = "bearer " + tokenService.CreateToken(userLogin.Email);
+                LoginResult isAdmin = _admin.CheckIsExist(userLogin);
 
-                return Ok(new LoginResponse { Token = token, Role = "admin" });
+                if (isAdmin.IsExist)
+                {
+                    TokenService tokenService = new TokenService(_configuration);
+                    string token = "bearer " + tokenService.CreateToken(userLogin.Email);
+
+                    return Ok(new LoginResponse { Token = token, Role = "admin" });
+                }
+                if (!isAdmin.Messsage.IsNullOrEmpty())
+                    return BadRequest(isAdmin.Messsage);
+
+                LoginResult isUser = _user.CheckIsExist(userLogin);
+
+                if (isUser.IsExist)
+                {
+                    TokenService tokenService = new TokenService(_configuration);
+                    string token = "bearer " + tokenService.CreateToken(userLogin.Email);
+
+                    return Ok(new LoginResponse { Token = token, Role = "user" });
+                }
+                if (!isUser.Messsage.IsNullOrEmpty())
+                    return BadRequest(isUser.Messsage);
+
+                LoginResult isVolunteer = _volunteer.CheckIsExist(userLogin);
+
+                if (isVolunteer.IsExist)
+                {
+                    TokenService tokenService = new TokenService(_configuration);
+                    string token = "bearer " + tokenService.CreateToken(userLogin.Email);
+
+                    return Ok(new LoginResponse { Token = token, Role = "volunteer" });
+                }
+                if (!isVolunteer.Messsage.IsNullOrEmpty())
+                    return BadRequest(isVolunteer.Messsage);
+
+                return BadRequest("User not found");
             }
-            if (!isAdmin.Messsage.IsNullOrEmpty())
-                return BadRequest(isAdmin.Messsage);
-
-            LoginResult isUser = _user.CheckIsExist(userLogin);
-
-            if (isUser.IsExist)
+            catch(Exception e)
             {
-                TokenService tokenService = new TokenService(_configuration);
-                string token = "bearer " + tokenService.CreateToken(userLogin.Email);
-
-                return Ok(new LoginResponse { Token = token, Role = "user" });
+                Console.WriteLine(e);
+                throw;
             }
-            if (!isUser.Messsage.IsNullOrEmpty())
-                return BadRequest(isUser.Messsage);
-
-            LoginResult isVolunteer = _volunteer.CheckIsExist(userLogin);
-
-            if (isVolunteer.IsExist)
-            {
-                TokenService tokenService = new TokenService(_configuration);
-                string token = "bearer " + tokenService.CreateToken(userLogin.Email);
-
-                return Ok(new LoginResponse { Token = token, Role = "volunteer" });
-            }
-            if (!isVolunteer.Messsage.IsNullOrEmpty())
-                return BadRequest(isVolunteer.Messsage);
-
-            return BadRequest("User not found");
         }
     }
 }

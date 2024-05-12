@@ -1,4 +1,6 @@
-﻿namespace MissingZoneApi.Contracts.AuthReg;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MissingZoneApi.Contracts.AuthReg;
 
 public class LoginResponse
 {

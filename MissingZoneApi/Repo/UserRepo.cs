@@ -41,30 +41,38 @@ public class UserRepo : IUser
 
     public async Task<PayloadResponse<UserInfo>> GetAll(PageData pageData)
     {
-        List<User> users = await _mzonedbContext.Users.ToListAsync();
-
-        int totalCount = users.Count();
-        int totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
-
-        var filteredList = users.Where(item => item.IsVerified == false)
-            .Skip((pageData.PageNumber - 1) * pageData.PageSize)
-            .Take(pageData.PageSize).Select(item => new UserInfo
-            {
-                Email = item.Email,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                Phone = item.Phone
-            })
-            .ToList();
-
-        return new PayloadResponse<UserInfo>
+        try
         {
-            TotalCount = totalCount,
-            PageNumber = pageData.PageNumber,
-            PageSize = pageData.PageSize,
-            TotalPages = totalPages,
-            Data = filteredList
-        };
+            List<User> users = await _mzonedbContext.Users.ToListAsync();
+
+            int totalCount = users.Count();
+            int totalPages = (int)Math.Ceiling(totalCount / (double)pageData.PageSize);
+
+            var filteredList = users.Where(item => item.IsVerified == false)
+                .Skip((pageData.PageNumber - 1) * pageData.PageSize)
+                .Take(pageData.PageSize).Select(item => new UserInfo
+                {
+                    Email = item.Email,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    Phone = item.Phone
+                })
+                .ToList();
+
+            return new PayloadResponse<UserInfo>
+            {
+                TotalCount = totalCount,
+                PageNumber = pageData.PageNumber,
+                PageSize = pageData.PageSize,
+                TotalPages = totalPages,
+                Data = filteredList
+            };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public async Task Verify(string email)
@@ -111,17 +119,25 @@ public class UserRepo : IUser
 
     public async Task Create(RegistrationRequest registration)
     {
-        await _mzonedbContext.Users.AddRangeAsync(new User
+        try
         {
-            Email = registration.Email,
-            Password = registration.Password,
-            FirstName = registration.FirstName,
-            LastName = registration.LastName,
-            Photo = Encoding.UTF8.GetBytes(registration.Photo),
-            IsVerified = false,
-            Phone = registration.Phone
-        });
+            await _mzonedbContext.Users.AddRangeAsync(new User
+            {
+                Email = registration.Email,
+                Password = registration.Password,
+                FirstName = registration.FirstName,
+                LastName = registration.LastName,
+                Photo = Encoding.UTF8.GetBytes(registration.Photo),
+                IsVerified = false,
+                Phone = registration.Phone
+            });
 
-        await _mzonedbContext.SaveChangesAsync();
+            await _mzonedbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

@@ -16,7 +16,6 @@ namespace MissingZoneApi.Controllers
             _comment = comment;
         }
 
-        [Authorize]
         [HttpPost("/{commentId}")]
         public async Task<IActionResult> VerifyComment(int commentId)
         {
@@ -31,7 +30,6 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("anonim/{missingPostId}")]
         public async Task<IActionResult> GetAnomimList(int missingPostId)
         {
@@ -46,7 +44,6 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("/{missingPostId}")]
         public async Task<IActionResult> GetList(int missingPostId)
         {
