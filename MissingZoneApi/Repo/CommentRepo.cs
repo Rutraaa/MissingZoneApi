@@ -19,7 +19,7 @@ public class CommentRepo : IComment
     {
         try
         {
-            Comment comment = await _mzonedbContext.Comments.FirstAsync(item => item.CommentId == commentId);
+            Comment comment = _mzonedbContext.Comments.First(item => item.CommentId == commentId);
             comment.IsVerified = true;
             await _mzonedbContext.SaveChangesAsync();
 
