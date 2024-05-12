@@ -47,5 +47,5 @@ Join the ranks of valiant contributors and leave your mark on the annals of Mizz
 MizzingZone pledges its allegiance to the principles of openness and freedom, releasing its powers under the banner of the [MIT License](LICENSE). Embrace its spirit and wield its powers with honor and integrity.
 
 ## Contact
-Should you encounter challenges or wish to share tales of valor and conquest, do not hesitate to dispatch a raven to [artbele21@egmail.com](mailto:artbele21@gmail.com). Our gates are always open to those who seek guidance or camaraderie in the noble quest of MizzingZone.
+Should you encounter challenges or wish to share tales of valor and conquest, do not hesitate to dispatch a raven to [artbele21@gmail.com](mailto:artbele21@gmail.com). Our gates are always open to those who seek guidance or camaraderie in the noble quest of MizzingZone.
 
