@@ -72,7 +72,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest pageData)
         {
@@ -93,7 +93,7 @@ namespace MissingZoneApi.Controllers
         }
 
         //[Authorize]
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -113,7 +113,7 @@ namespace MissingZoneApi.Controllers
         }
 
         //[Authorize]
-        [HttpDelete("/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
