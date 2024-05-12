@@ -72,7 +72,7 @@ namespace MissingZoneApi.Controllers
             }
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllMissingPostsRequest pageData)
         {

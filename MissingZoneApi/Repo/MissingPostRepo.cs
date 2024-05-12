@@ -69,23 +69,22 @@ public class MissingPostRepo : IMissingPost
     public async Task<List<MissingPostInfo>> InsertPhotos(List<MissingPost> list)
     {
         var listPhotos = _mzonedbContext.Photos.ToList();
-        List<MissingPostInfo> result = list.Join(listPhotos, post => post.MissingPostId, list => list.MissingPostId,
-            (post, list) => new MissingPostInfo
+        List<MissingPostInfo> result = list.Select(item => new MissingPostInfo
             {
-                MissingPostId = post.MissingPostId,
-                Title = post.Title,
-                Description = post.Description,
-                ContactInfo = post.ContactInfo,
-                UserId = post.UserId,
-                FirstName = post.FirstName,
-                LastName = post.LastName,
-                FatherName = post.FatherName,
-                BirthDate = post.BirthDate,
-                CreateDate = post.CreateDate,
-                City = post.City,
-                Coordinates = post.Coordinates,
-                PrePhoto = list.Content
-            }).ToList();
+                MissingPostId = item.MissingPostId,
+                Title = item.Title,
+                Description = item.Description,
+                ContactInfo = item.ContactInfo,
+                UserId = item.UserId,
+                FirstName = item.FirstName,
+                LastName = item.LastName,
+                FatherName = item.FatherName,
+                BirthDate = item.BirthDate,
+                CreateDate = item.CreateDate,
+                City = item.City,
+                Coordinates = item.Coordinates,
+                PrePhoto = listPhotos.First(item =>item.MissingPostId == item.MissingPostId).Content
+        }).ToList();
         return result;
     }
 
