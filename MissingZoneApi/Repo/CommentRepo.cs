@@ -91,5 +91,7 @@ public class CommentRepo : IComment
                 CreatedDate = DateTime.Now
             });
         }
+
+        await _mzonedbContext.SaveChangesAsync();
     }
 }
